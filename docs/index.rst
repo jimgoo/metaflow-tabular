@@ -10,7 +10,6 @@ Welcome to metaflow-tabular's documentation!
    metaflow_tabular
    contributing
    authors
-   history
 
 Indices and tables
 ==================

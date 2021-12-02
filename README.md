@@ -6,9 +6,3 @@
 
 Lots of tabular models running in Metaflow
 
-Documentation: https://jimgoo.github.io/metaflow-tabular.
-
-## Features
-
-- TODO
-
