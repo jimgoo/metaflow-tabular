@@ -8,16 +8,16 @@ Lots of tabular models running in Metaflow.
 
 ## Installation
 
-The main dependency is Metaflow.
-
 ```bash
 pip install metaflow-tabular
 ```
 
+The only dependency is [Metaflow](https://github.com/Netflix/metaflow/).  We make use of its bulit-in conda decorator where possible and use the included pip decorator otherwise. Therefore you will need the conda package manager to be installed with the conda-forge channel added.
+   1. Download Miniconda at https://docs.conda.io/en/latest/miniconda.html
+   2. ```conda config --add channels conda-forge```
+
+For dramatically faster conda environment operations, you can install [mamba](https://github.com/mamba-org/mamba) and use it with [this fork of Metaflow](https://github.com/jimgoo/metaflow) that's in code review.
+
 ## Contributing
 
 We welcome contributions, please see our [contribution guide](https://jimgoo.github.io/metaflow-tabular/contributing.html) for more details.
-
-### Code style
-
-We use [black](https://black.readthedocs.io/en/stable/) as a code formatter. The easiest way to ensure your commits are always formatted with the correct version of `black` it is to use [pre-commit](https://pre-commit.com/): install it and then run `pre-commit install` once in your local copy of the repo. 

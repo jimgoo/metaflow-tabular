@@ -1,3 +1,13 @@
+"""
+This flow requires the 'conda' package manager to be installed with the
+conda-forge channel added.
+   a. Download Miniconda at https://docs.conda.io/en/latest/miniconda.html
+   b. ```conda config --add channels conda-forge```
+
+To run this flow:
+```python forecasting_flow.py --environment=conda run```
+"""
+
 from metaflow import (
     Flow,
     FlowSpec,
@@ -11,12 +21,12 @@ from metaflow import (
     step,
 )
 
-from metaflow_tabular.pip_decorator import pip
+from pip_decorator import pip
 
 # use this version in pre and post processing steps
 PANDAS_VERSION = "1.3.3"
 
-# install this for all steps (for jupyter notebooks)
+# install this for all steps (helpful with jupyter)
 IPYKERNEL_VERSION = "6.5.0"
 
 
@@ -35,12 +45,12 @@ def prediction_iterator(n_train, n_test, forecast_steps):
 @conda_base(python="3.8.12")
 class ForecastingFlow(FlowSpec):
     """
-    A flow for benchmarking different forecasting libraries.
+    A flow for benchmarking forecasting libraries.
     """
 
-    df_file = IncludeFile(
-        "df_file",
-        help="The path to a DataFrame file",
+    df_path = Parameter(
+        "df_path",
+        help="The path to a DataFrame CSV file",
         default="https://jgoode.s3.amazonaws.com/ts-datasets/seattle-trail.csv",
     )
 
@@ -54,6 +64,12 @@ class ForecastingFlow(FlowSpec):
         "target_col",
         help="Column of the target in the input DataFrame",
         default="BGT North of NE 70th Total",
+    )
+
+    model_config = Parameter(
+        "model_config",
+        help="The path to a model config file",
+        default="../configs/forecasting/models/default.yaml",
     )
 
     @conda(
@@ -77,10 +93,10 @@ class ForecastingFlow(FlowSpec):
         # Print the Metaflow metadata provider
         print("Using metadata provider: %s" % get_metadata())
 
-        df = pd.read_csv(StringIO(self.df_file))
+        df = pd.read_csv(self.df_path)
 
-        assert self.date_col in df.columns
-        assert self.target_col in df.columns
+        assert self.date_col in df.columns, '"%s" not in columns' % self.date_col
+        assert self.target_col in df.columns, '"%s" not in columns' % self.target_col
 
         # parse date column and set it as the index
         df[self.date_col] = pd.to_datetime(df[self.date_col])
@@ -89,9 +105,14 @@ class ForecastingFlow(FlowSpec):
         # get index of the target column
         self.target_index = df.columns.tolist().index(self.target_col)
 
-        # this will pickle the dataframe for other steps to use
+        # this will pickle the DataFrame for other steps to use
         self.df = df
 
+        # load the model config file
+        with open(self.model_config, "r") as f:
+            self.models = yaml.safe_load(f)
+
+        # setup the backtesting windows
         self.n_train = 500
         self.n_test = 100
         self.forecast_steps = 10
@@ -106,17 +127,12 @@ class ForecastingFlow(FlowSpec):
             )
         ]
 
-        print("backtest_windows")
-        print(self.backtest_windows)
-
         print("Input DataFrame")
         print(self.df)
-
-        with open("default-models.yaml", "r") as f:
-            self.models = yaml.safe_load(f)
-
         print("Models")
         pprint(self.models)
+        print("backtest_windows")
+        print(self.backtest_windows)
 
         # branches will run in parallel
         self.next(self.fit_merlion, self.fit_gluonts)
@@ -131,7 +147,6 @@ class ForecastingFlow(FlowSpec):
         from merlion.models.factory import ModelFactory
         from merlion.transform.resample import TemporalResample
         from merlion.utils import TimeSeries
-        from merlion.utils.resample import get_gcd_timedelta, granularity_str_to_seconds
 
         def run_model(config):
             print(f"Running: {config}")
@@ -193,23 +208,13 @@ class ForecastingFlow(FlowSpec):
     def fit_gluonts(self):
         """
         Fit gluon-ts models.
-        We must use pip instead of conda because `mxnet==1.5.0` is broken.
+        We must use pip instead of conda because mxnet 1.5.0 is broken.
         """
-
-        from pydoc import locate
-
         import numpy as np
         import pandas as pd
+        from pydoc import locate
         from gluonts.dataset.common import ListDataset
-        from gluonts.dataset.field_names import FieldName
-        from gluonts.dataset.repository.datasets import get_dataset
-        from gluonts.dataset.rolling_dataset import (
-            StepStrategy,
-            generate_rolling_dataset,
-        )
-        from gluonts.evaluation import Evaluator, make_evaluation_predictions
         from gluonts.model.forecast import SampleForecast
-        from gluonts.model.simple_feedforward import SimpleFeedForwardEstimator
         from gluonts.mx.trainer import Trainer
 
         df_freq = pd.infer_freq(self.df.index)
@@ -229,13 +234,11 @@ class ForecastingFlow(FlowSpec):
                     freq=df_freq,
                 )
 
-            # print(next(iter(df_to_dset(self.df))))
-
             EstimatorClass = locate(config["estimator_class"])
 
             trainer_kwargs = config.get("trainer_kwargs", None)
             if trainer_kwargs is not None:
-                trainer_kwargs["epochs"] = 2
+                # trainer_kwargs["epochs"] = 2
                 trainer = Trainer(**trainer_kwargs)
             else:
                 trainer = None
@@ -270,7 +273,7 @@ class ForecastingFlow(FlowSpec):
 
                     prev_dset = df_to_dset(prev)
 
-                    # will be an iterator over the number of targets (only one here)
+                    # An iterator over the number of targets (only one for univariate)
                     forecast = predictor.predict(prev_dset, num_samples=100)
 
                     # For models like DeepAR, will be (num_samples x self.forecast_steps),
@@ -305,7 +308,6 @@ class ForecastingFlow(FlowSpec):
         Join our parallel branches and merge results.
         """
         from collections import OrderedDict
-
         import numpy as np
         import pandas as pd
 
