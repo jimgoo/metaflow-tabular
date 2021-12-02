@@ -1,0 +1,37 @@
+name: docs
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.8]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install library reqs
+      run: |
+        python -m pip install .
+    - name: Install dev reqs
+      run: |
+        python -m pip install -r requirements_dev.txt
+    # generate the HTML docs
+    - name: Build docs
+      run: |
+        make docs
+    # upload the HTML docs to a new branch named `gh-pages`
+    - name: Publish docs
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        personal_token: ${{ secrets.PERSONAL_TOKEN }}
+        publish_dir: ./docs/_build/html
