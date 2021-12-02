@@ -1,0 +1,38 @@
+---
+
+merlion:
+  - id: "merlion-Arima1"
+    model_name: "Arima"
+    model_kwargs:
+      order: [30, 0, 10]
+      
+  - id: "merlion-Arima2"
+    model_name: "Arima"
+    model_kwargs:
+      order: [10, 0, 5]
+
+gluonts:
+  - id: "gluonts-SeasonalNaive"
+    estimator_class: "gluonts.model.seasonal_naive.SeasonalNaiveEstimator"
+    estimator_kwargs: {}
+    # no trainer
+    
+  - id: "gluonts-NPTS"
+    estimator_class: "gluonts.model.npts.NPTSEstimator"
+    estimator_kwargs: {}
+    # no trainer
+
+  - id: "gluonts-DeepAR"
+    estimator_class: "gluonts.model.deepar.DeepAREstimator"
+    estimator_kwargs: {}
+    trainer_kwargs: {}
+
+  - id: "gluonts-SimpleFeedForward"
+    estimator_class: "gluonts.model.simple_feedforward.SimpleFeedForwardEstimator"
+    estimator_kwargs: {}
+    trainer_kwargs: {}
+    
+  - id: "gluonts-Transformer"
+    estimator_class: "gluonts.model.transformer.TransformerEstimator"
+    estimator_kwargs: {}
+    trainer_kwargs: {}

@@ -1,5 +1,5 @@
-Welcome to metaflow-tabular's documentation!
-======================================
+metaflow-tabular
+================
 
 .. toctree::
    :maxdepth: 2
@@ -7,9 +7,8 @@ Welcome to metaflow-tabular's documentation!
 
    installation
    usage
-   metaflow_tabular
+   modules
    contributing
-   authors
 
 Indices and tables
 ==================

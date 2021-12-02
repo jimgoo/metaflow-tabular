@@ -1,13 +1,20 @@
 metaflow\_tabular package
 =========================
 
+Subpackages
+-----------
+
+.. toctree::
+
+    metaflow_tabular.forecasting
+
 Submodules
 ----------
 
-metaflow\_tabular.metaflow\_tabular module
-------------------------------------------
+metaflow\_tabular.pip\_decorator module
+---------------------------------------
 
-.. automodule:: metaflow_tabular.metaflow_tabular
+.. automodule:: metaflow_tabular.pip_decorator
     :members:
     :undoc-members:
     :show-inheritance:

@@ -4,11 +4,19 @@
 [![tests](https://github.com/jimgoo/metaflow-tabular/actions/workflows/tests.yml/badge.svg)](https://github.com/jimgoo/metaflow-tabular/actions)
 [![docs](https://github.com/jimgoo/metaflow-tabular/actions/workflows/docs.yml/badge.svg)](https://jimgoo.github.io/metaflow-tabular)
 
-Lots of tabular models running in Metaflow
+Lots of tabular models running in Metaflow.
+
+## Installation
+
+The main dependency is Metaflow.
+
+```bash
+pip install metaflow-tabular
+```
 
 ## Contributing
 
-We welcome contributions of new models. Please see our [contribution guide](https://jimgoo.github.io/metaflow-tabular/contributing.html) for more details.
+We welcome contributions, please see our [contribution guide](https://jimgoo.github.io/metaflow-tabular/contributing.html) for more details.
 
 ### Code style
 

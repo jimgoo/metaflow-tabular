@@ -4,7 +4,6 @@
 
 import pytest
 
-
 from metaflow_tabular import metaflow_tabular
 
 
