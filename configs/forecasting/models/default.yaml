@@ -2,10 +2,53 @@
 
 libs:
   merlion:
-    - id: "merlion-Arima1"
+    - id: "merlion-Arima"
       model_name: "Arima"
+      model_kwargs: {}
+
+    - id: "merlion-Sarima"
+      model_name: "Sarima"
+      model_kwargs: {}
+    
+    # - id: "merlion-AutoSarima"
+    #   model_name: "AutoSarima"
+    #   model_kwargs: {}
+
+    - id: "merlion-ets"
+      model_name: "ETS"
+      model_kwargs: {}
+
+    - id: "merlion-MSES"
+      model_name: "MSES"
+      model_kwargs: {}
+
+    # - id: "merlion-prophet"
+    #   model_name: "Prophet"
+    #   model_kwargs: {}
+
+    # - id: "merlion-AutoProphet"
+    #   model_name: "AutoProphet"
+    #   model_kwargs: {}
+
+    - id: "merlion-VAR"
+      model_name: "VectorAR"
       model_kwargs:
-        order: [30, 0, 10]
+        maxlags: 10
+
+    - id: "merlion-RandomForestForecaster"
+      model_name: "RandomForestForecaster"
+      model_kwargs:
+        maxlags: 10
+
+    - id: "merlion-ExtraTreesForecaster"
+      model_name: "ExtraTreesForecaster"
+      model_kwargs:
+        maxlags: 10        
+
+    - id: "merlion-LGBMForecaster"
+      model_name: "LGBMForecaster"
+      model_kwargs:
+        maxlags: 10
 
   gluonts:
     - id: "gluonts-SeasonalNaive"
@@ -13,11 +56,6 @@ libs:
       estimator_kwargs: {}
       # no trainer
 
-    - id: "gluonts-SeasonalNaive"
-      estimator_class: "gluonts.model.seasonal_naive.SeasonalNaiveEstimator"
-      estimator_kwargs: {}
-      # no trainer
-      
     - id: "gluonts-NPTS"
       estimator_class: "gluonts.model.npts.NPTSEstimator"
       estimator_kwargs: {}
@@ -39,10 +77,10 @@ libs:
       trainer_kwargs: {}
 
   kats:
-    # - id: "kats-prophet"
-    #   model_class: "kats.models.prophet.ProphetModel"
-    #   params_class: "kats.models.prophet.ProphetParams"
-    #   params_kwargs: {}
+    - id: "kats-prophet"
+      model_class: "kats.models.prophet.ProphetModel"
+      params_class: "kats.models.prophet.ProphetParams"
+      params_kwargs: {}
 
     - id: "kats-holtwinters"
       model_class: "kats.models.holtwinters.HoltWintersModel"

@@ -1,0 +1,25 @@
+---
+
+# one model from each library
+libs:
+  merlion:
+    - id: "merlion-Arima"
+      model_name: "Arima"
+      model_kwargs: {}
+
+  gluonts:
+    - id: "gluonts-SeasonalNaive"
+      estimator_class: "gluonts.model.seasonal_naive.SeasonalNaiveEstimator"
+      estimator_kwargs: {}
+      # no trainer
+
+  kats:
+    - id: "kats-prophet"
+      model_class: "kats.models.prophet.ProphetModel"
+      params_class: "kats.models.prophet.ProphetParams"
+      params_kwargs: {}
+
+  neuralprophet:
+    - id: "neuralprophet-default"
+      model_class: "neuralprophet.NeuralProphet"
+      model_kwargs: {}
