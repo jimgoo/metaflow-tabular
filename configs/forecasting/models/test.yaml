@@ -1,11 +1,70 @@
 ---
 
-# one model from each library
 libs:
   merlion:
     - id: "merlion-Arima"
       model_name: "Arima"
+      model_class: "merlion.models.forecast.arima.Arima"
       model_kwargs: {}
+
+    - id: "merlion-Sarima"
+      model_name: "Sarima"
+      model_class: "merlion.models.forecast.sarima.Sarima"
+      model_kwargs: {}
+
+    # - id: "merlion-AutoSarima"
+    #   model_name: "AutoSarima"
+    #   model_class: "merlion.models.automl.autosarima.AutoSarima"
+    #   model_kwargs: {}
+
+    - id: "merlion-ets"
+      model_name: "ETS"
+      model_class: "merlion.models.forecast.ets.ETS"
+      model_kwargs: {}
+
+    - id: "merlion-MSES"
+      model_name: "MSES"
+      model_class: "merlion.models.forecast.smoother.MSES"
+      model_kwargs: {}
+
+    # - id: "merlion-prophet"
+    #   model_name: "Prophet"
+    #   model_class: "merlion.models.forecast.prophet.Prophet"
+    #   model_kwargs: {}
+
+    # - id: "merlion-prophet-auto"
+    #   model_name: "Prophet"
+    #   model_class: "merlion.models.forecast.prophet.Prophet"
+    #   model_kwargs:
+    #     add_seasonality: "auto"
+
+    - id: "merlion-VAR"
+      model_name: "VectorAR"
+      model_class: "merlion.models.forecast.vector_ar.VectorAR"
+      model_kwargs:
+        # required
+        maxlags: 10
+
+    - id: "merlion-RandomForest"
+      model_name: "RandomForestForecaster"
+      model_class: "merlion.models.forecast.baggingtrees.RandomForestForecaster"
+      model_kwargs:
+        # required
+        maxlags: 10
+
+    - id: "merlion-ExtraTrees"
+      model_name: "ExtraTreesForecaster"
+      model_class: "merlion.models.forecast.baggingtrees.ExtraTreesForecaster"
+      model_kwargs:
+        # required
+        maxlags: 10
+
+    - id: "merlion-LGBM"
+      model_name: "LGBMForecaster"
+      model_class: "merlion.models.forecast.boostingtrees.LGBMForecaster"
+      model_kwargs:
+        # required
+        maxlags: 10
 
   gluonts:
     - id: "gluonts-SeasonalNaive"
@@ -13,10 +72,38 @@ libs:
       estimator_kwargs: {}
       # no trainer
 
+    - id: "gluonts-NPTS"
+      estimator_class: "gluonts.model.npts.NPTSEstimator"
+      estimator_kwargs: {}
+      # no trainer
+
+    - id: "gluonts-DeepAR"
+      estimator_class: "gluonts.model.deepar.DeepAREstimator"
+      estimator_kwargs: {}
+      trainer_kwargs:
+        epochs: 30
+
+    - id: "gluonts-SimpleFeedForward"
+      estimator_class: "gluonts.model.simple_feedforward.SimpleFeedForwardEstimator"
+      estimator_kwargs: {}
+      trainer_kwargs:
+        epochs: 30       
+
+    - id: "gluonts-Transformer"
+      estimator_class: "gluonts.model.transformer.TransformerEstimator"
+      estimator_kwargs: {}
+      trainer_kwargs:
+        epochs: 30
+
   kats:
     - id: "kats-prophet"
       model_class: "kats.models.prophet.ProphetModel"
       params_class: "kats.models.prophet.ProphetParams"
+      params_kwargs: {}
+
+    - id: "kats-holtwinters"
+      model_class: "kats.models.holtwinters.HoltWintersModel"
+      params_class: "kats.models.holtwinters.HoltWintersParams"
       params_kwargs: {}
 
   neuralprophet:

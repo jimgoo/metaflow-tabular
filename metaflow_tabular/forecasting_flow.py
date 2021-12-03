@@ -3,6 +3,8 @@ To run this flow:
 ```python forecasting_flow.py --environment=conda run```
 """
 
+from functools import partial
+
 from metaflow import (
     Flow,
     FlowSpec,
@@ -17,16 +19,29 @@ from metaflow import (
 )
 
 from pip_decorator import pip
+from forecasting_models import GluonTSModel, KatsModel, NeuralProphetModel, MerlionModel
 
-# use this version in pre and post processing steps
+# this version is used in pre and post processing steps
 PANDAS_VERSION = "1.3.3"
 
-# installed for all steps
-# not required but helpful for debugging with jupyter
-IPYKERNEL_VERSION = "6.5.0"
-
-# for when we must use pip instead of conda
+# this version is used when conda packages aren't available
 PIP_VERSION = "21.3.1"
+
+
+def run_model(
+    model_config, wrapper_class, target_index, forecast_steps, train_df, data_freq
+):
+    try:
+        model = wrapper_class(
+            model_config, target_index, forecast_steps, data_freq=data_freq
+        )
+        model.fit(train_df)
+        forecast = model.predict(train_df)
+        forecast["id"] = model_config["id"]
+        return forecast
+    except:
+        print(f"Error with {model_config}")
+        raise
 
 
 @conda_base(python="3.8.12")
@@ -71,22 +86,14 @@ class ForecastingFlow(FlowSpec):
         default=10,
     )
 
-    @conda(
-        libraries={
-            "ipykernel": IPYKERNEL_VERSION,
-            "pandas": PANDAS_VERSION,
-            "pyyaml": "6.0",
-        }
-    )
+    @conda(libraries={"pandas": PANDAS_VERSION, "pyyaml": "6.0"})
     @step
     def start(self):
         """
         Start the flow by preprocessing the data.
         """
-        from io import StringIO
-        from pprint import pprint
-
         import pandas as pd
+        from pprint import pprint
         import yaml
 
         # Print the Metaflow metadata provider
@@ -139,208 +146,99 @@ class ForecastingFlow(FlowSpec):
 
         # branches will run in parallel
         self.next(
-            self.backtest_merlion,
-            self.backtest_gluonts,
-            self.backtest_kats,
-            self.backtest_neuralprophet,
+            self.run_merlion,
+            self.run_gluonts,
+            self.run_kats,
+            self.run_neuralprophet,
         )
 
-    # @batch(cpu=2, memory=4000)
-    @conda(libraries={"ipykernel": IPYKERNEL_VERSION, "salesforce-merlion": "1.0.2"})
+    @conda(libraries={"salesforce-merlion": "1.0.2"})
     @step
-    def backtest_merlion(self):
+    def run_merlion(self):
         """
         Backtest Merlion models.
         https://github.com/salesforce/Merlion
         """
-        from merlion.models.factory import ModelFactory
-        from merlion.transform.resample import TemporalResample
-        from merlion.utils import TimeSeries
-
-        def run_model(config):
-            print(f"Running: {config}")
-
-            model_kwargs = config["model_kwargs"]
-            model_kwargs["transform"] = TemporalResample(
-                granularity=None,
-                aggregation_policy="Mean",
-                missing_value_policy="FFill",
-            )
-            model_kwargs["target_seq_index"] = self.target_index
-
-            model = ModelFactory.create(
-                name=config["model_name"],
-                max_forecast_steps=self.forecast_steps,
-                **model_kwargs,
-            )
-
-            train_ts = TimeSeries.from_pd(self.train_df)
-            model.train(train_ts)
-
-            forecast, err = model.forecast(self.forecast_steps)
-            forecast = forecast.to_pd().values
-            return dict(id=config["id"], forecast=forecast)
 
         self.forecasts = parallel_map(
-            run_model, self.model_config["libs"].get("merlion", [])
+            partial(
+                run_model,
+                wrapper_class=MerlionModel,
+                target_index=self.target_index,
+                forecast_steps=self.forecast_steps,
+                train_df=self.train_df,
+                data_freq=self.freq,
+            ),
+            self.model_config["libs"].get("merlion", []),
         )
         self.next(self.join)
 
-    # We must use pip instead of conda because mxnet 1.5.0 is broken.
-    # @batch(cpu=2, memory=4000)
+    # We use pip because mxnet 1.5.0 is broken and there's no newer conda version.
     @pip(libraries={"mxnet": "1.8.0.post0", "gluonts": "0.8.1"})
-    @conda(libraries={"ipykernel": IPYKERNEL_VERSION, "pip": PIP_VERSION})
+    @conda(libraries={"pip": PIP_VERSION})
     @step
-    def backtest_gluonts(self):
+    def run_gluonts(self):
         """
         Backtest gluon-ts models.
         https://github.com/awslabs/gluon-ts
         """
-        import numpy as np
-        import pandas as pd
-        from pydoc import locate
-        from gluonts.dataset.common import ListDataset
-        from gluonts.model.forecast import SampleForecast
-        from gluonts.mx.trainer import Trainer
-
-        def df_to_dset(df):
-            return ListDataset(
-                [
-                    {
-                        "start": df.index[0],
-                        "target": df.values[:, self.target_index],
-                    },
-                ],
-                freq=self.freq,
-            )
-
-        def run_model(config):
-            print(f"Running: {config}")
-
-            EstimatorClass = locate(config["estimator_class"])
-
-            trainer_kwargs = config.get("trainer_kwargs", None)
-            if trainer_kwargs is not None:
-                # trainer_kwargs["epochs"] = 2
-                trainer = Trainer(**trainer_kwargs)
-            else:
-                trainer = None
-
-            if trainer is not None:
-                estimator = EstimatorClass(
-                    prediction_length=self.forecast_steps,
-                    freq=self.freq,
-                    trainer=trainer,
-                    **config.get("estimator_kwargs", {}),
-                )
-            else:
-                estimator = EstimatorClass(
-                    prediction_length=self.forecast_steps,
-                    freq=self.freq,
-                    **config.get("estimator_kwargs", {}),
-                )
-
-            train_dset = df_to_dset(self.train_df)
-            predictor = estimator.train(training_data=train_dset)
-
-            # An iterator over the number of targets (only one for univariate)
-            forecast = predictor.predict(train_dset, num_samples=100)
-
-            # For models like DeepAR, will be (num_samples x self.forecast_steps),
-            # for models without sampling, will be (1 x self.forecast_steps).
-            forecast = next(forecast)
-
-            # some models return QuantileForecast instead
-            assert isinstance(forecast, SampleForecast)
-
-            # take mean over samples
-            forecast = np.mean(forecast.samples, 0)
-
-            return dict(id=config["id"], forecast=forecast)
 
         self.forecasts = parallel_map(
-            run_model, self.model_config["libs"].get("gluonts", [])
+            partial(
+                run_model,
+                wrapper_class=GluonTSModel,
+                target_index=self.target_index,
+                forecast_steps=self.forecast_steps,
+                train_df=self.train_df,
+                data_freq=self.freq,
+            ),
+            self.model_config["libs"].get("gluonts", []),
         )
         self.next(self.join)
 
-    # @batch(cpu=2, memory=4000)
-    @conda(libraries={"ipykernel": IPYKERNEL_VERSION, "kats": "0.1.0"})
+    @conda(libraries={"kats": "0.1.0"})
     @step
-    def backtest_kats(self):
+    def run_kats(self):
         """
         Backtest Kats models.
         https://github.com/facebookresearch/Kats
         """
-
-        from pydoc import locate
-        from kats.consts import TimeSeriesData
-
-        def df_to_data(df):
-            df2 = df.iloc[:, [self.target_index]].reset_index()
-            df2.columns = ["time", "value"]
-            return TimeSeriesData(df2)
-
-        def run_model(config):
-            print(f"Running: {config}")
-
-            ModelClass = locate(config["model_class"])
-            ParamsClass = locate(config["params_class"])
-
-            params = ParamsClass(**config.get("params_kwargs", {}))
-            train_data = df_to_data(self.train_df)
-            model = ModelClass(train_data, params)
-            model.fit()
-
-            # some models have columns "fcst_lower" and "fcst_upper" for upper and lower bounds
-            forecast = model.predict(steps=self.forecast_steps, freq=self.freq)
-            forecast = forecast["fcst"].values
-
-            return dict(id=config["id"], forecast=forecast)
-
         self.forecasts = parallel_map(
-            run_model, self.model_config["libs"].get("kats", [])
+            partial(
+                run_model,
+                wrapper_class=KatsModel,
+                target_index=self.target_index,
+                forecast_steps=self.forecast_steps,
+                train_df=self.train_df,
+                data_freq=self.freq,
+            ),
+            self.model_config["libs"].get("kats", []),
         )
         self.next(self.join)
 
-    # @batch(cpu=2, memory=4000)
+    # We use pip because there isn't a conda package for NeuralProphet.
     @pip(libraries={"neuralprophet": "0.3.0"})
-    @conda(libraries={"ipykernel": IPYKERNEL_VERSION, "pip": PIP_VERSION})
+    @conda(libraries={"pip": PIP_VERSION})
     @step
-    def backtest_neuralprophet(self):
+    def run_neuralprophet(self):
         """
         Backtest NeuralProphet models.
         https://github.com/ourownstory/neural_prophet
         """
-
-        from pydoc import locate
-        from neuralprophet import NeuralProphet
-
-        def convert_df(df):
-            # requires a column named "ds" for dates and "y" for target
-            df2 = df.iloc[:, [self.target_index]].reset_index()
-            df2.columns = ["ds", "y"]
-            return df2
-
-        def run_model(config):
-            print(f"Running: {config}")
-
-            train_df = convert_df(self.train_df)
-
-            model = NeuralProphet(**config.get("model_kwargs", {}))
-            model.fit(train_df, freq=self.freq)
-
-            future = model.make_future_dataframe(train_df, periods=self.forecast_steps)
-            forecast = model.predict(future)
-            forecast = forecast["yhat1"].values
-
-            return dict(id=config["id"], forecast=forecast)
-
         self.forecasts = parallel_map(
-            run_model, self.model_config["libs"].get("neuralprophet", [])
+            partial(
+                run_model,
+                wrapper_class=NeuralProphetModel,
+                target_index=self.target_index,
+                forecast_steps=self.forecast_steps,
+                train_df=self.train_df,
+                data_freq=self.freq,
+            ),
+            self.model_config["libs"].get("neuralprophet", []),
         )
         self.next(self.join)
 
-    @conda(libraries={"ipykernel": IPYKERNEL_VERSION, "pandas": PANDAS_VERSION})
+    @conda(libraries={"pandas": PANDAS_VERSION})
     @step
     def join(self, inputs):
         """
@@ -358,9 +256,11 @@ class ForecastingFlow(FlowSpec):
                 assert (
                     forecast["id"] not in forecasts
                 ), f"Duplicate forecast id: {forecast['id']}"
-                forecasts[forecast["id"]] = forecast["forecast"].reshape(-1)
+                forecasts[forecast["id"]] = forecast["y_hat"].reshape(-1)
 
         self.forecasts = pd.DataFrame(forecasts)
+
+        print("forecasts:")
         print(self.forecasts)
 
         if self.test_df is not None:
@@ -369,32 +269,22 @@ class ForecastingFlow(FlowSpec):
                 : self.forecast_steps, [self.target_index] * self.forecasts.shape[1]
             ]
             pred = self.forecasts
+
+            print("--> true")
             print(true)
-            print("--")
+            print("--> pred")
             print(pred)
-            rmse = np.sqrt(np.mean((pred.values - true.values) ** 2, 1))
+
+            rmse = pd.Series(
+                np.sqrt(np.mean((pred.values - true.values) ** 2, 1)),
+                index=forecasts.columns,
+            )
             step_rmse = pd.DataFrame(np.sqrt((pred.values - true.values) ** 2))
-            print(f"RMSE: {rmse}")
-            print(f"Step RMSE:")
+
+            print(f"RMSE over forecast steps")
+            print(rmse.sort_values())
+            print(f"Error per step")
             print(step_rmse)
-
-        #         error = np.zeros((inp.forecast_steps, 1))
-        #         for window in model_windows:
-        #             # univariate scoring
-        #             true = window["true"][:, inp.target_index].reshape(-1, 1)
-        #             pred = window["pred"].reshape(-1, 1)
-        #             error += (pred - true) ** 2
-        #             model_id = window["id"]  # all have same id
-
-        #         rmse = np.sqrt(np.mean(error))
-        #         errors[model_id] = error
-        #         rmses[model_id] = rmse
-        #         # TODO: handle multiple retrainings
-
-        # print(pd.Series(rmses, name="RMSE").sort_values())
-
-        # self.errors = errors
-        # self.rmses = rmses
 
         self.next(self.end)
 
