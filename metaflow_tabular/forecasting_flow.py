@@ -250,15 +250,33 @@ class ForecastingFlow(FlowSpec):
 
         forecasts = OrderedDict()
         for lib in inputs:
+
+            # carry these forward
+            self.train_df = lib.train_df
             self.test_df = lib.test_df
             self.target_index = lib.target_index
+
             for forecast in lib.forecasts:
                 assert (
                     forecast["id"] not in forecasts
                 ), f"Duplicate forecast id: {forecast['id']}"
                 forecasts[forecast["id"]] = forecast["y_hat"].reshape(-1)
+                # y_dates = forecast.get("y_dates", None)
+                # if y_dates is not None:
+                #     print(time_stamps)
+                #     print(y_dates)
+                #     print((time_stamps == y_dates).all())
 
-        self.forecasts = pd.DataFrame(forecasts)
+        # build time_stamps for the forecast
+        freq = self.train_df.index[1] - self.train_df.index[0]
+        future_dates = pd.DatetimeIndex(
+            [
+                self.train_df.index[-1] + (i + 1) * freq
+                for i in range(self.forecast_steps)
+            ]
+        )
+
+        self.forecasts = pd.DataFrame(forecasts, index=future_dates)
 
         print("forecasts:")
         print(self.forecasts)
@@ -275,16 +293,13 @@ class ForecastingFlow(FlowSpec):
             print("--> pred")
             print(pred)
 
-            rmse = pd.Series(
-                np.sqrt(np.mean((pred.values - true.values) ** 2, 1)),
-                index=forecasts.columns,
-            )
-            step_rmse = pd.DataFrame(np.sqrt((pred.values - true.values) ** 2))
+            self.rmse = pd.Series(
+                np.sqrt(np.mean((pred.values - true.values) ** 2, axis=0)),
+                index=self.forecasts.columns,
+            ).sort_values()
 
-            print(f"RMSE over forecast steps")
-            print(rmse.sort_values())
-            print(f"Error per step")
-            print(step_rmse)
+            print(f"RMSE:")
+            print(self.rmse)
 
         self.next(self.end)
 
