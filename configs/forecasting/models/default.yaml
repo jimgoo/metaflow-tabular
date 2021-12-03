@@ -1,38 +1,55 @@
 ---
 
-merlion:
-  - id: "merlion-Arima1"
-    model_name: "Arima"
-    model_kwargs:
-      order: [30, 0, 10]
+libs:
+  merlion:
+    - id: "merlion-Arima1"
+      model_name: "Arima"
+      model_kwargs:
+        order: [30, 0, 10]
+
+  gluonts:
+    - id: "gluonts-SeasonalNaive"
+      estimator_class: "gluonts.model.seasonal_naive.SeasonalNaiveEstimator"
+      estimator_kwargs: {}
+      # no trainer
+
+    - id: "gluonts-SeasonalNaive"
+      estimator_class: "gluonts.model.seasonal_naive.SeasonalNaiveEstimator"
+      estimator_kwargs: {}
+      # no trainer
       
-  - id: "merlion-Arima2"
-    model_name: "Arima"
-    model_kwargs:
-      order: [10, 0, 5]
+    - id: "gluonts-NPTS"
+      estimator_class: "gluonts.model.npts.NPTSEstimator"
+      estimator_kwargs: {}
+      # no trainer
 
-gluonts:
-  - id: "gluonts-SeasonalNaive"
-    estimator_class: "gluonts.model.seasonal_naive.SeasonalNaiveEstimator"
-    estimator_kwargs: {}
-    # no trainer
-    
-  - id: "gluonts-NPTS"
-    estimator_class: "gluonts.model.npts.NPTSEstimator"
-    estimator_kwargs: {}
-    # no trainer
+    - id: "gluonts-DeepAR"
+      estimator_class: "gluonts.model.deepar.DeepAREstimator"
+      estimator_kwargs: {}
+      trainer_kwargs: {}
 
-  - id: "gluonts-DeepAR"
-    estimator_class: "gluonts.model.deepar.DeepAREstimator"
-    estimator_kwargs: {}
-    trainer_kwargs: {}
+    - id: "gluonts-SimpleFeedForward"
+      estimator_class: "gluonts.model.simple_feedforward.SimpleFeedForwardEstimator"
+      estimator_kwargs: {}
+      trainer_kwargs: {}
+      
+    - id: "gluonts-Transformer"
+      estimator_class: "gluonts.model.transformer.TransformerEstimator"
+      estimator_kwargs: {}
+      trainer_kwargs: {}
 
-  - id: "gluonts-SimpleFeedForward"
-    estimator_class: "gluonts.model.simple_feedforward.SimpleFeedForwardEstimator"
-    estimator_kwargs: {}
-    trainer_kwargs: {}
-    
-  - id: "gluonts-Transformer"
-    estimator_class: "gluonts.model.transformer.TransformerEstimator"
-    estimator_kwargs: {}
-    trainer_kwargs: {}
+  kats:
+    # - id: "kats-prophet"
+    #   model_class: "kats.models.prophet.ProphetModel"
+    #   params_class: "kats.models.prophet.ProphetParams"
+    #   params_kwargs: {}
+
+    - id: "kats-holtwinters"
+      model_class: "kats.models.holtwinters.HoltWintersModel"
+      params_class: "kats.models.holtwinters.HoltWintersParams"
+      params_kwargs: {}
+
+  neuralprophet:
+    - id: "neuralprophet-default"
+      model_class: "neuralprophet.NeuralProphet"
+      model_kwargs: {}
