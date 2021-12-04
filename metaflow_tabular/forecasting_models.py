@@ -52,8 +52,6 @@ class MerlionModel(BaseModel):
             **model_kwargs,
         )
 
-        # self.data_freq_delta = pd.Timedelta(self.data_freq)
-
     def fit(self, train_df):
         train_ts = self.df_to_data_type(train_df)
         self.model.train(train_ts)

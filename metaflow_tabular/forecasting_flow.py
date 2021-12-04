@@ -74,6 +74,10 @@ class ForecastingFlow(FlowSpec):
         default="BGT North of NE 70th Total",
     )
 
+    # data_config_path = Parameter(
+    #     "data_config_path",
+    #     help=
+
     model_config_path = Parameter(
         "model_config_path",
         help="The path to a model config file",
@@ -110,7 +114,6 @@ class ForecastingFlow(FlowSpec):
             # parse date column and set it as the index
             df[self.date_col] = pd.to_datetime(df[self.date_col])
             df.set_index(self.date_col, inplace=True)
-
             return df
 
         self.train_df = load_df(self.train_path)
@@ -144,7 +147,8 @@ class ForecastingFlow(FlowSpec):
         print("model_config")
         pprint(self.model_config)
 
-        # branches will run in parallel
+        # these branches will run in parallel
+        # TODO: skip those with no entries in the model config
         self.next(
             self.run_merlion,
             self.run_gluonts,
@@ -159,7 +163,6 @@ class ForecastingFlow(FlowSpec):
         Backtest Merlion models.
         https://github.com/salesforce/Merlion
         """
-
         self.forecasts = parallel_map(
             partial(
                 run_model,
@@ -182,7 +185,6 @@ class ForecastingFlow(FlowSpec):
         Backtest gluon-ts models.
         https://github.com/awslabs/gluon-ts
         """
-
         self.forecasts = parallel_map(
             partial(
                 run_model,
@@ -249,8 +251,9 @@ class ForecastingFlow(FlowSpec):
         import pandas as pd
 
         forecasts = OrderedDict()
-        for lib in inputs:
 
+        # get forecasts for each library
+        for lib in inputs:
             # carry these forward
             self.train_df = lib.train_df
             self.test_df = lib.test_df
@@ -261,13 +264,8 @@ class ForecastingFlow(FlowSpec):
                     forecast["id"] not in forecasts
                 ), f"Duplicate forecast id: {forecast['id']}"
                 forecasts[forecast["id"]] = forecast["y_hat"].reshape(-1)
-                # y_dates = forecast.get("y_dates", None)
-                # if y_dates is not None:
-                #     print(time_stamps)
-                #     print(y_dates)
-                #     print((time_stamps == y_dates).all())
 
-        # build time_stamps for the forecast
+        # get timestamps for the forecasts
         freq = self.train_df.index[1] - self.train_df.index[0]
         future_dates = pd.DatetimeIndex(
             [
