@@ -6,10 +6,10 @@
 
 Tabular models from popular open-source libraries running in Metaflow. Supports:
 
-- [Salesforce's Merlion](https://github.com/salesforce/Merlion)
-- [Amazons's GluonTS](https://github.com/awslabs/gluon-ts)
-- [Facebook's Kats](https://github.com/facebookresearch/Kats)
-- [Facebook's NeuralProphet](https://github.com/ourownstory/neural_prophet)
+- [Merlion](https://github.com/salesforce/Merlion)
+- [GluonTS](https://github.com/awslabs/gluon-ts)
+- [Kats](https://github.com/facebookresearch/Kats)
+- [NeuralProphet](https://github.com/ourownstory/neural_prophet)
 
 ## Installation
 
