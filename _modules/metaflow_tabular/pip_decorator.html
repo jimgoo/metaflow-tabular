@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>metaflow_tabular.pip_decorator &mdash; metaflow-tabular 0.1.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> metaflow-tabular
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">metaflow_tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">metaflow-tabular</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>metaflow_tabular.pip_decorator</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for metaflow_tabular.pip_decorator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="pip"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.pip_decorator.pip">[docs]</a><span class="k">def</span> <span class="nf">pip</span><span class="p">(</span><span class="n">libraries</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Flow decorator which mimics @conda, except installs pip deps. Use @conda instead whenever possible.</span>
+
+<span class="sd">    Note: this requires 3rd party modules to be imported _inside_ the flow/step this decorator scopes; otherwise you</span>
+<span class="sd">    will get ModuleNotFound errors. Also note that this decorator has to be on the line before @conda is used.</span>
+
+<span class="sd">    To install wheels from a specific source url, put the url after the library name separated by a pipe, i.e.</span>
+<span class="sd">    @pip({&#39;torch|your.urlr/here&#39;:1.8.1)</span>
+
+<span class="sd">    Will check to see if the pkg is already installed before re-installing. This means that this will not install the</span>
+<span class="sd">    exact pinned version if the library already exists.</span>
+
+<span class="sd">    Based on: https://github.com/Netflix/metaflow/issues/24#issuecomment-571976372</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">function</span><span class="p">):</span>
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="kn">import</span> <span class="nn">subprocess</span>
+
+            <span class="n">to_install</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">to_install_source_override</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="p">(</span>
+                <span class="n">library</span><span class="p">,</span>
+                <span class="n">version</span><span class="p">,</span>
+            <span class="p">)</span> <span class="ow">in</span> <span class="n">libraries</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>  <span class="c1"># NOTE: for some reason, list comp breaks this</span>
+                <span class="k">if</span> <span class="s2">&quot;|&quot;</span> <span class="ow">in</span> <span class="n">library</span><span class="p">:</span>  <span class="c1"># signal alternative source url</span>
+                    <span class="c1"># if specifying the alternative source, always flag to install. this is because the</span>
+                    <span class="c1"># import_module() step won&#39;t fail, resulting in the wrong env</span>
+                    <span class="n">library</span><span class="p">,</span> <span class="n">source</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)</span>
+                    <span class="n">parsed</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">library</span><span class="si">}</span><span class="s2">==</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="n">to_install_source_override</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">parsed</span><span class="p">,</span> <span class="n">source</span><span class="p">))</span>
+                    <span class="k">continue</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># note: this will fail to import any reqs that have an extra, e.g. rag[serve]. however, we do not</span>
+                    <span class="c1"># want to ignore the extra or else we will not pip install the extras and we will get downstream</span>
+                    <span class="c1"># errors</span>
+                    <span class="n">import_module</span><span class="p">(</span>
+                        <span class="n">library</span>
+                    <span class="p">)</span>  <span class="c1"># note: will not throw exception if existing lib is wrong version</span>
+                <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;failed to import library </span><span class="si">{</span><span class="n">library</span><span class="si">}</span><span class="s2">; pip installing&quot;</span><span class="p">)</span>
+                    <span class="n">parsed</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">library</span><span class="si">}</span><span class="s2">==</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="n">to_install</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parsed</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;An error occurred while loading module </span><span class="si">{</span><span class="n">library</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+            <span class="c1"># without this context manager, you can break your venv if you keyboard interrupt a flow while it&#39;s pip</span>
+            <span class="c1"># installing libraries</span>
+            <span class="k">with</span> <span class="n">DelayedKeyboardInterrupt</span><span class="p">():</span>
+                <span class="c1"># install directly from pip</span>
+                <span class="c1"># NOTE: do not use sys.executable, &quot;-m&quot;, &quot;pip&quot; because this will pip install to the wrong conda env!</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;pip&quot;</span><span class="p">,</span> <span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="s2">&quot;--quiet&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">to_install</span><span class="p">])</span>
+                <span class="c1"># install pkgs from remote source</span>
+                <span class="k">for</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="n">to_install_source_override</span><span class="p">:</span>
+                    <span class="n">parsed</span><span class="p">,</span> <span class="n">src</span> <span class="o">=</span> <span class="n">pkg</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pip installing </span><span class="si">{</span><span class="n">parsed</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="s2">&quot;pip&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;install&quot;</span><span class="p">,</span>
+                            <span class="c1"># &quot;--ignore-installed&quot;,  # force install of remote version</span>
+                            <span class="s2">&quot;--quiet&quot;</span><span class="p">,</span>
+                            <span class="n">parsed</span><span class="p">,</span>
+                            <span class="s2">&quot;--find-links&quot;</span><span class="p">,</span>
+                            <span class="n">src</span><span class="p">,</span>
+                        <span class="p">]</span>
+                    <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span>
+
+    <span class="k">return</span> <span class="n">decorator</span></div>
+
+
+<div class="viewcode-block" id="DelayedKeyboardInterrupt"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.pip_decorator.DelayedKeyboardInterrupt">[docs]</a><span class="k">class</span> <span class="nc">DelayedKeyboardInterrupt</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Context manager to prevent keyboardinterrupt from interrupting important code.</span>
+
+<span class="sd">    source: https://stackoverflow.com/a/21919644/4212158</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal_received</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_handler</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DelayedKeyboardInterrupt.handler"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.pip_decorator.DelayedKeyboardInterrupt.handler">[docs]</a>    <span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal_received</span> <span class="o">=</span> <span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;SIGINT received. Delaying KeyboardInterrupt.&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_handler</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal_received</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">old_handler</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">signal_received</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Jimmie Goode.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

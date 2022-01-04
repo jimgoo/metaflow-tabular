@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>metaflow_tabular.forecasting_models &mdash; metaflow-tabular 0.1.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> metaflow-tabular
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">metaflow_tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">metaflow-tabular</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>metaflow_tabular.forecasting_models</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for metaflow_tabular.forecasting_models</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A set of wrapper classes around forecasting libraries. The imports are inside</span>
+<span class="sd">the method calls so that the libraries only have to be installed inside the</span>
+<span class="sd">the Metaflow step environments.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">pydoc</span> <span class="kn">import</span> <span class="n">locate</span>
+
+
+<div class="viewcode-block" id="BaseModel"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.BaseModel">[docs]</a><span class="k">class</span> <span class="nc">BaseModel</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_index</span><span class="p">,</span> <span class="n">steps_ahead</span><span class="p">,</span> <span class="n">data_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_index</span> <span class="o">=</span> <span class="n">target_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">steps_ahead</span> <span class="o">=</span> <span class="n">steps_ahead</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_freq</span> <span class="o">=</span> <span class="n">data_freq</span>
+
+<div class="viewcode-block" id="BaseModel.fit"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.BaseModel.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_df</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fit the model to the training dataframe.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="BaseModel.predict"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.BaseModel.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context_df</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Predict future values using the context dataframe.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="BaseModel.df_to_data_type"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.BaseModel.df_to_data_type">[docs]</a>    <span class="k">def</span> <span class="nf">df_to_data_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a dataframe to the data type of the model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="MerlionModel"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.MerlionModel">[docs]</a><span class="k">class</span> <span class="nc">MerlionModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">target_index</span><span class="p">,</span> <span class="n">steps_ahead</span><span class="p">,</span> <span class="n">data_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">merlion.models.factory</span> <span class="kn">import</span> <span class="n">ModelFactory</span>
+        <span class="kn">from</span> <span class="nn">merlion.transform.resample</span> <span class="kn">import</span> <span class="n">TemporalResample</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">target_index</span><span class="p">,</span> <span class="n">steps_ahead</span><span class="p">,</span> <span class="n">data_freq</span><span class="p">)</span>
+
+        <span class="n">model_kwargs</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;model_kwargs&quot;</span><span class="p">]</span>
+        <span class="n">model_kwargs</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TemporalResample</span><span class="p">(</span>
+            <span class="n">granularity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">aggregation_policy</span><span class="o">=</span><span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
+            <span class="n">missing_value_policy</span><span class="o">=</span><span class="s2">&quot;FFill&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">model_kwargs</span><span class="p">[</span><span class="s2">&quot;target_seq_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_index</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">ModelFactory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;model_name&quot;</span><span class="p">],</span>
+            <span class="n">max_forecast_steps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">steps_ahead</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">model_kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="MerlionModel.fit"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.MerlionModel.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_df</span><span class="p">):</span>
+        <span class="n">train_ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_to_data_type</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_ts</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MerlionModel.predict"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.MerlionModel.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context_df</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">time_series_prev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_to_data_type</span><span class="p">(</span><span class="n">context_df</span><span class="p">)</span>
+
+        <span class="c1"># build time_stamps instead of using steps_ahead since an integer only works with some models</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="n">context_df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">context_df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">time_stamps</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">context_df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">freq</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps_ahead</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="n">y_hat</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">forecast</span><span class="p">(</span><span class="n">time_stamps</span><span class="p">,</span> <span class="n">time_series_prev</span><span class="o">=</span><span class="n">time_series_prev</span><span class="p">)</span>
+        <span class="n">y_hat</span> <span class="o">=</span> <span class="n">y_hat</span><span class="o">.</span><span class="n">to_pd</span><span class="p">()</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">err</span><span class="o">.</span><span class="n">to_pd</span><span class="p">()</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">y_hat</span><span class="o">=</span><span class="n">y_hat</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">y_dates</span><span class="o">=</span><span class="n">y_hat</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">err</span><span class="o">=</span><span class="n">err</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MerlionModel.df_to_data_type"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.MerlionModel.df_to_data_type">[docs]</a>    <span class="k">def</span> <span class="nf">df_to_data_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">merlion.utils</span> <span class="kn">import</span> <span class="n">TimeSeries</span>
+
+        <span class="k">return</span> <span class="n">TimeSeries</span><span class="o">.</span><span class="n">from_pd</span><span class="p">(</span><span class="n">df</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="GluonTSModel"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.GluonTSModel">[docs]</a><span class="k">class</span> <span class="nc">GluonTSModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">target_index</span><span class="p">,</span> <span class="n">steps_ahead</span><span class="p">,</span> <span class="n">data_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">gluonts.mx.trainer</span> <span class="kn">import</span> <span class="n">Trainer</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">target_index</span><span class="p">,</span> <span class="n">steps_ahead</span><span class="p">,</span> <span class="n">data_freq</span><span class="p">)</span>
+
+        <span class="n">EstimatorClass</span> <span class="o">=</span> <span class="n">locate</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;estimator_class&quot;</span><span class="p">])</span>
+
+        <span class="n">trainer_kwargs</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;trainer_kwargs&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">trainer_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="o">**</span><span class="n">trainer_kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">trainer</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">trainer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">estimator</span> <span class="o">=</span> <span class="n">EstimatorClass</span><span class="p">(</span>
+                <span class="n">prediction_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">steps_ahead</span><span class="p">,</span>
+                <span class="n">freq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_freq</span><span class="p">,</span>
+                <span class="n">trainer</span><span class="o">=</span><span class="n">trainer</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;estimator_kwargs&quot;</span><span class="p">,</span> <span class="p">{}),</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">estimator</span> <span class="o">=</span> <span class="n">EstimatorClass</span><span class="p">(</span>
+                <span class="n">prediction_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">steps_ahead</span><span class="p">,</span>
+                <span class="n">freq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_freq</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;estimator_kwargs&quot;</span><span class="p">,</span> <span class="p">{}),</span>
+            <span class="p">)</span>
+
+<div class="viewcode-block" id="GluonTSModel.fit"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.GluonTSModel.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_df</span><span class="p">):</span>
+        <span class="n">training_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_to_data_type</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predictor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimator</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">training_data</span><span class="o">=</span><span class="n">training_data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GluonTSModel.predict"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.GluonTSModel.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context_df</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+        <span class="kn">from</span> <span class="nn">gluonts.model.forecast</span> <span class="kn">import</span> <span class="n">SampleForecast</span>
+
+        <span class="n">context_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_to_data_type</span><span class="p">(</span><span class="n">context_df</span><span class="p">)</span>
+
+        <span class="c1"># An iterator over the number of targets (only one for univariate)</span>
+        <span class="n">forecast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictor</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">context_data</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+        <span class="c1"># For models like DeepAR, will be (num_samples x self.forecast_steps),</span>
+        <span class="c1"># for models without sampling, will be (1 x self.forecast_steps).</span>
+        <span class="n">forecast</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">forecast</span><span class="p">)</span>
+
+        <span class="c1"># some models return QuantileForecast instead</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">forecast</span><span class="p">,</span> <span class="n">SampleForecast</span><span class="p">),</span> <span class="s2">&quot;QuantileForecast not supported&quot;</span>
+
+        <span class="c1"># take mean over samples</span>
+        <span class="n">y_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">forecast</span><span class="o">.</span><span class="n">samples</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">y_hat</span><span class="o">=</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="n">forecast</span><span class="o">.</span><span class="n">samples</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GluonTSModel.df_to_data_type"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.GluonTSModel.df_to_data_type">[docs]</a>    <span class="k">def</span> <span class="nf">df_to_data_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">gluonts.dataset.common</span> <span class="kn">import</span> <span class="n">ListDataset</span>
+
+        <span class="k">return</span> <span class="n">ListDataset</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_index</span><span class="p">],</span>
+                <span class="p">},</span>
+            <span class="p">],</span>
+            <span class="n">freq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_freq</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="KatsModel"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.KatsModel">[docs]</a><span class="k">class</span> <span class="nc">KatsModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">target_index</span><span class="p">,</span> <span class="n">steps_ahead</span><span class="p">,</span> <span class="n">data_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">target_index</span><span class="p">,</span> <span class="n">steps_ahead</span><span class="p">,</span> <span class="n">data_freq</span><span class="p">)</span>
+
+        <span class="n">params_class</span> <span class="o">=</span> <span class="n">locate</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;params_class&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params_class</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;params_kwargs&quot;</span><span class="p">,</span> <span class="p">{}))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_class</span> <span class="o">=</span> <span class="n">locate</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;model_class&quot;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="KatsModel.fit"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.KatsModel.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_df</span><span class="p">):</span>
+        <span class="n">train_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_to_data_type</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_class</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="KatsModel.predict"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.KatsModel.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context_df</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">forecast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">steps_ahead</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_freq</span><span class="p">)</span>
+
+        <span class="c1"># some models have &quot;fcst_lower&quot; and &quot;fcst_upper&quot; columns</span>
+        <span class="n">y_hat</span> <span class="o">=</span> <span class="n">forecast</span><span class="p">[</span><span class="s2">&quot;fcst&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">y_dates</span> <span class="o">=</span> <span class="n">forecast</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">y_hat</span><span class="o">=</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y_dates</span><span class="o">=</span><span class="n">y_dates</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="KatsModel.df_to_data_type"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.KatsModel.df_to_data_type">[docs]</a>    <span class="k">def</span> <span class="nf">df_to_data_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">kats.consts</span> <span class="kn">import</span> <span class="n">TimeSeriesData</span>
+
+        <span class="n">df2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">target_index</span><span class="p">]]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">df2</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">TimeSeriesData</span><span class="p">(</span><span class="n">df2</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="NeuralProphetModel"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.NeuralProphetModel">[docs]</a><span class="k">class</span> <span class="nc">NeuralProphetModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">target_index</span><span class="p">,</span> <span class="n">steps_ahead</span><span class="p">,</span> <span class="n">data_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">neuralprophet</span> <span class="kn">import</span> <span class="n">NeuralProphet</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">target_index</span><span class="p">,</span> <span class="n">steps_ahead</span><span class="p">,</span> <span class="n">data_freq</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">NeuralProphet</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;model_kwargs&quot;</span><span class="p">,</span> <span class="p">{}))</span>
+
+<div class="viewcode-block" id="NeuralProphetModel.fit"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.NeuralProphetModel.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_df</span><span class="p">):</span>
+        <span class="n">train_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_to_data_type</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_freq</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NeuralProphetModel.predict"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.NeuralProphetModel.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context_df</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">context_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_to_data_type</span><span class="p">(</span><span class="n">context_df</span><span class="p">)</span>
+        <span class="n">future</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">make_future_dataframe</span><span class="p">(</span><span class="n">context_df</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">steps_ahead</span><span class="p">)</span>
+        <span class="n">forecast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">future</span><span class="p">)</span>
+
+        <span class="n">y_hat</span> <span class="o">=</span> <span class="n">forecast</span><span class="p">[</span><span class="s2">&quot;yhat1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">y_dates</span> <span class="o">=</span> <span class="n">forecast</span><span class="p">[</span><span class="s2">&quot;ds&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">y_hat</span><span class="o">=</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y_dates</span><span class="o">=</span><span class="n">y_dates</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NeuralProphetModel.df_to_data_type"><a class="viewcode-back" href="../../metaflow_tabular.html#metaflow_tabular.forecasting_models.NeuralProphetModel.df_to_data_type">[docs]</a>    <span class="k">def</span> <span class="nf">df_to_data_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NeuralProphet requires a column named &quot;ds&quot; for dates and &quot;y&quot; for target.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">target_index</span><span class="p">]]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">df2</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ds&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">df2</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Jimmie Goode.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

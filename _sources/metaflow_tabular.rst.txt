@@ -1,0 +1,38 @@
+metaflow\_tabular package
+=========================
+
+Submodules
+----------
+
+metaflow\_tabular.forecasting\_flow module
+------------------------------------------
+
+.. automodule:: metaflow_tabular.forecasting_flow
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+metaflow\_tabular.forecasting\_models module
+--------------------------------------------
+
+.. automodule:: metaflow_tabular.forecasting_models
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+metaflow\_tabular.pip\_decorator module
+---------------------------------------
+
+.. automodule:: metaflow_tabular.pip_decorator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: metaflow_tabular
+    :members:
+    :undoc-members:
+    :show-inheritance:

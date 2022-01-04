@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>metaflow_tabular package &mdash; metaflow-tabular 0.1.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="metaflow_tabular" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> metaflow-tabular
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">metaflow_tabular</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">metaflow_tabular package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metaflow-tabular-forecasting-flow-module">metaflow_tabular.forecasting_flow module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-metaflow_tabular.forecasting_models">metaflow_tabular.forecasting_models module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-metaflow_tabular.pip_decorator">metaflow_tabular.pip_decorator module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-metaflow_tabular">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">metaflow-tabular</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">metaflow_tabular</a> &raquo;</li>
+      <li>metaflow_tabular package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/metaflow_tabular.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="metaflow-tabular-package">
+<h1>metaflow_tabular package<a class="headerlink" href="#metaflow-tabular-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="metaflow-tabular-forecasting-flow-module">
+<h2>metaflow_tabular.forecasting_flow module<a class="headerlink" href="#metaflow-tabular-forecasting-flow-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-metaflow_tabular.forecasting_models">
+<span id="metaflow-tabular-forecasting-models-module"></span><h2>metaflow_tabular.forecasting_models module<a class="headerlink" href="#module-metaflow_tabular.forecasting_models" title="Permalink to this headline">¶</a></h2>
+<p>A set of wrapper classes around forecasting libraries. The imports are inside
+the method calls so that the libraries only have to be installed inside the
+the Metaflow step environments.</p>
+<dl class="class">
+<dt id="metaflow_tabular.forecasting_models.BaseModel">
+<em class="property">class </em><code class="descclassname">metaflow_tabular.forecasting_models.</code><code class="descname">BaseModel</code><span class="sig-paren">(</span><em>target_index</em>, <em>steps_ahead</em>, <em>data_freq=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#BaseModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.BaseModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.BaseModel.df_to_data_type">
+<code class="descname">df_to_data_type</code><span class="sig-paren">(</span><em>df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#BaseModel.df_to_data_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.BaseModel.df_to_data_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a dataframe to the data type of the model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.BaseModel.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>train_df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#BaseModel.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.BaseModel.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the model to the training dataframe.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.BaseModel.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>context_df=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#BaseModel.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.BaseModel.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict future values using the context dataframe.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="metaflow_tabular.forecasting_models.GluonTSModel">
+<em class="property">class </em><code class="descclassname">metaflow_tabular.forecasting_models.</code><code class="descname">GluonTSModel</code><span class="sig-paren">(</span><em>config</em>, <em>target_index</em>, <em>steps_ahead</em>, <em>data_freq=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#GluonTSModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.GluonTSModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#metaflow_tabular.forecasting_models.BaseModel" title="metaflow_tabular.forecasting_models.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">metaflow_tabular.forecasting_models.BaseModel</span></code></a></p>
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.GluonTSModel.df_to_data_type">
+<code class="descname">df_to_data_type</code><span class="sig-paren">(</span><em>df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#GluonTSModel.df_to_data_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.GluonTSModel.df_to_data_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a dataframe to the data type of the model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.GluonTSModel.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>train_df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#GluonTSModel.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.GluonTSModel.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the model to the training dataframe.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.GluonTSModel.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>context_df=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#GluonTSModel.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.GluonTSModel.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict future values using the context dataframe.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="metaflow_tabular.forecasting_models.KatsModel">
+<em class="property">class </em><code class="descclassname">metaflow_tabular.forecasting_models.</code><code class="descname">KatsModel</code><span class="sig-paren">(</span><em>config</em>, <em>target_index</em>, <em>steps_ahead</em>, <em>data_freq=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#KatsModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.KatsModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#metaflow_tabular.forecasting_models.BaseModel" title="metaflow_tabular.forecasting_models.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">metaflow_tabular.forecasting_models.BaseModel</span></code></a></p>
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.KatsModel.df_to_data_type">
+<code class="descname">df_to_data_type</code><span class="sig-paren">(</span><em>df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#KatsModel.df_to_data_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.KatsModel.df_to_data_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a dataframe to the data type of the model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.KatsModel.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>train_df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#KatsModel.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.KatsModel.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the model to the training dataframe.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.KatsModel.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>context_df=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#KatsModel.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.KatsModel.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict future values using the context dataframe.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="metaflow_tabular.forecasting_models.MerlionModel">
+<em class="property">class </em><code class="descclassname">metaflow_tabular.forecasting_models.</code><code class="descname">MerlionModel</code><span class="sig-paren">(</span><em>config</em>, <em>target_index</em>, <em>steps_ahead</em>, <em>data_freq=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#MerlionModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.MerlionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#metaflow_tabular.forecasting_models.BaseModel" title="metaflow_tabular.forecasting_models.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">metaflow_tabular.forecasting_models.BaseModel</span></code></a></p>
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.MerlionModel.df_to_data_type">
+<code class="descname">df_to_data_type</code><span class="sig-paren">(</span><em>df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#MerlionModel.df_to_data_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.MerlionModel.df_to_data_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a dataframe to the data type of the model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.MerlionModel.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>train_df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#MerlionModel.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.MerlionModel.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the model to the training dataframe.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.MerlionModel.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>context_df=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#MerlionModel.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.MerlionModel.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict future values using the context dataframe.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="metaflow_tabular.forecasting_models.NeuralProphetModel">
+<em class="property">class </em><code class="descclassname">metaflow_tabular.forecasting_models.</code><code class="descname">NeuralProphetModel</code><span class="sig-paren">(</span><em>config</em>, <em>target_index</em>, <em>steps_ahead</em>, <em>data_freq=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#NeuralProphetModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.NeuralProphetModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#metaflow_tabular.forecasting_models.BaseModel" title="metaflow_tabular.forecasting_models.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">metaflow_tabular.forecasting_models.BaseModel</span></code></a></p>
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.NeuralProphetModel.df_to_data_type">
+<code class="descname">df_to_data_type</code><span class="sig-paren">(</span><em>df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#NeuralProphetModel.df_to_data_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.NeuralProphetModel.df_to_data_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>NeuralProphet requires a column named “ds” for dates and “y” for target.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.NeuralProphetModel.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>train_df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#NeuralProphetModel.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.NeuralProphetModel.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the model to the training dataframe.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="metaflow_tabular.forecasting_models.NeuralProphetModel.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>context_df=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/forecasting_models.html#NeuralProphetModel.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.forecasting_models.NeuralProphetModel.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict future values using the context dataframe.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-metaflow_tabular.pip_decorator">
+<span id="metaflow-tabular-pip-decorator-module"></span><h2>metaflow_tabular.pip_decorator module<a class="headerlink" href="#module-metaflow_tabular.pip_decorator" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="metaflow_tabular.pip_decorator.DelayedKeyboardInterrupt">
+<em class="property">class </em><code class="descclassname">metaflow_tabular.pip_decorator.</code><code class="descname">DelayedKeyboardInterrupt</code><a class="reference internal" href="_modules/metaflow_tabular/pip_decorator.html#DelayedKeyboardInterrupt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.pip_decorator.DelayedKeyboardInterrupt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Context manager to prevent keyboardinterrupt from interrupting important code.</p>
+<p>source: <a class="reference external" href="https://stackoverflow.com/a/21919644/4212158">https://stackoverflow.com/a/21919644/4212158</a></p>
+<dl class="method">
+<dt id="metaflow_tabular.pip_decorator.DelayedKeyboardInterrupt.handler">
+<code class="descname">handler</code><span class="sig-paren">(</span><em>sig</em>, <em>frame</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/pip_decorator.html#DelayedKeyboardInterrupt.handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.pip_decorator.DelayedKeyboardInterrupt.handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="metaflow_tabular.pip_decorator.pip">
+<code class="descclassname">metaflow_tabular.pip_decorator.</code><code class="descname">pip</code><span class="sig-paren">(</span><em>libraries: Dict[str, str]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaflow_tabular/pip_decorator.html#pip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metaflow_tabular.pip_decorator.pip" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Flow decorator which mimics &#64;conda, except installs pip deps. Use &#64;conda instead whenever possible.</p>
+<p>Note: this requires 3rd party modules to be imported _inside_ the flow/step this decorator scopes; otherwise you
+will get ModuleNotFound errors. Also note that this decorator has to be on the line before &#64;conda is used.</p>
+<p>To install wheels from a specific source url, put the url after the library name separated by a pipe, i.e.
+&#64;pip({‘torch|your.urlr/here’:1.8.1)</p>
+<p>Will check to see if the pkg is already installed before re-installing. This means that this will not install the
+exact pinned version if the library already exists.</p>
+<p>Based on: <a class="reference external" href="https://github.com/Netflix/metaflow/issues/24#issuecomment-571976372">https://github.com/Netflix/metaflow/issues/24#issuecomment-571976372</a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-metaflow_tabular">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-metaflow_tabular" title="Permalink to this headline">¶</a></h2>
+<p>Top-level package for metaflow-tabular.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="metaflow_tabular" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Jimmie Goode.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
