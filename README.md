@@ -1,6 +1,5 @@
 # metaflow-tabular
 
-[![pypi](https://img.shields.io/pypi/v/metaflow-tabular.svg)](https://pypi.org/project/metaflow-tabular)
 [![tests](https://github.com/jimgoo/metaflow-tabular/actions/workflows/tests.yml/badge.svg)](https://github.com/jimgoo/metaflow-tabular/actions)
 [![docs](https://github.com/jimgoo/metaflow-tabular/actions/workflows/docs.yml/badge.svg)](https://jimgoo.github.io/metaflow-tabular)
 
@@ -16,7 +15,7 @@ Tabular models from popular open-source libraries running in Metaflow. Supports:
 To install, run
 
 ```bash
-pip install metaflow-tabular
+pip install git+https://github.com/jimgoo/metaflow-tabular.git
 ```
 
 The only dependency is [Metaflow](https://github.com/Netflix/metaflow/).  We make use of its bulit-in conda decorator where possible and use the included pip decorator otherwise. Therefore you will need the conda package manager to be installed with the conda-forge channel added.
