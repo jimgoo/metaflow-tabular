@@ -40,22 +40,22 @@ Step start
     => run_merlion, run_gluonts, run_kats, run_neuralprophet
 
 Step run_merlion
-    Backtest Merlion models.
+    Run Merlion models.
     https://github.com/salesforce/Merlion
     => join
 
 Step run_gluonts
-    Backtest gluon-ts models.
+    Run gluon-ts models.
     https://github.com/awslabs/gluon-ts
     => join
 
 Step run_kats
-    Backtest Kats models.
+    Run Kats models.
     https://github.com/facebookresearch/Kats
     => join
 
 Step run_neuralprophet
-    Backtest NeuralProphet models.
+    Run NeuralProphet models.
     https://github.com/ourownstory/neural_prophet
     => join
 

@@ -160,7 +160,7 @@ class ForecastingFlow(FlowSpec):
     @step
     def run_merlion(self):
         """
-        Backtest Merlion models.
+        Run Merlion models.
         https://github.com/salesforce/Merlion
         """
         self.forecasts = parallel_map(
@@ -182,7 +182,7 @@ class ForecastingFlow(FlowSpec):
     @step
     def run_gluonts(self):
         """
-        Backtest gluon-ts models.
+        Run gluon-ts models.
         https://github.com/awslabs/gluon-ts
         """
         self.forecasts = parallel_map(
@@ -202,7 +202,7 @@ class ForecastingFlow(FlowSpec):
     @step
     def run_kats(self):
         """
-        Backtest Kats models.
+        Run Kats models.
         https://github.com/facebookresearch/Kats
         """
         self.forecasts = parallel_map(
@@ -224,7 +224,7 @@ class ForecastingFlow(FlowSpec):
     @step
     def run_neuralprophet(self):
         """
-        Backtest NeuralProphet models.
+        Run NeuralProphet models.
         https://github.com/ourownstory/neural_prophet
         """
         self.forecasts = parallel_map(
